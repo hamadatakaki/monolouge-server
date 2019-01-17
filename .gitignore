@@ -1,4 +1,6 @@
 .vscode/*
 .idea/*
-hide_settings.py
 */migrations/*
+
+localsetting.py
+
