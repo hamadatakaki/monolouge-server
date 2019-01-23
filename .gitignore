@@ -4,3 +4,6 @@
 
 localsetting.py
 
+/static/photos/
+/media/
+/.venv/

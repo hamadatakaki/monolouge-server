@@ -4,10 +4,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+ipython = "*"
 
 [packages]
-django = "*"
+django = ">=2.1"
+django-imagekit = "*"
+django-filter = "*"
+djangorestframework = "*"
 pymysql = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
