@@ -137,4 +137,7 @@ AUTH_USER_MODEL = "accounts.Account"
 INSTALLED_APPS += [
     "monologue_api",
     "accounts",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_filters"
 ]

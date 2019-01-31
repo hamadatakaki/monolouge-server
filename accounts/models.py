@@ -14,11 +14,11 @@ import uuid as uuid_lib
 
 
 def get_default_status_model_object():
-    got_obj, _ = Status.objects.get_or_create(
+    obj, _ = Status.objects.get_or_create(
         action="no action",
         emotion="no emotion"
     )
-    return got_obj.pk
+    return obj.pk
 
 
 class AccountManager(BaseUserManager):
@@ -67,7 +67,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         _('アカウントID'),
         max_length=31,
         unique=True,
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        help_text=_('Required. 31 characters or fewer. Letters, digits and @/./+/-/_ only.'),
         error_messages={
             'unique': _("そのアカウントIDを持ったアカウントはすでに存在しています"),
         },
@@ -77,7 +77,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField(max_length=150, blank=True)
 
     # Relational keys
-    said = models.ForeignKey(Said, on_delete=models.CASCADE, blank=True, null=True)
+    said = models.ForeignKey(
+        Said,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
     status = models.ForeignKey(
         Status,
         on_delete=models.CASCADE,
