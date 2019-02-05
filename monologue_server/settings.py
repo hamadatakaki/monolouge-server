@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -139,5 +140,13 @@ INSTALLED_APPS += [
     "accounts",
     "rest_framework",
     "rest_framework.authtoken",
-    "django_filters"
+    "django_filters",
+    'corsheaders'
 ]
+
+# CORS settings
+# allowed Origin
+CORS_ORIGIN_WHITELIST = [
+    'localhost:8080',
+]
+CORS_ALLOW_CREDENTIALS = True

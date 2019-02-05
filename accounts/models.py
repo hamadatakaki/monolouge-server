@@ -8,17 +8,9 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
-from monologue_api.models import Status, Said
+from monologue_api.models import Status, Said, DEFAULT_STATUS_ID
 
 import uuid as uuid_lib
-
-
-def get_default_status_model_object():
-    obj, _ = Status.objects.get_or_create(
-        action="no action",
-        emotion="no emotion"
-    )
-    return obj.pk
 
 
 class AccountManager(BaseUserManager):
@@ -86,7 +78,13 @@ class Account(AbstractBaseUser, PermissionsMixin):
     status = models.ForeignKey(
         Status,
         on_delete=models.CASCADE,
-        default=get_default_status_model_object,
+        default=DEFAULT_STATUS_ID,
+    )
+    following_accounts = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
 
     origin = models.ImageField(upload_to="static/photos", default="static/photos/fish_jellyfish.png")
