@@ -17,7 +17,7 @@ class Said(models.Model):
     status = models.ForeignKey(
         Status,
         on_delete=models.CASCADE,
+        related_name="saids",
         default=DEFAULT_STATUS_ID,
     )
 
-# TODO Saidを取得した際に、Statusを展開して返すようにSerializerを設定する

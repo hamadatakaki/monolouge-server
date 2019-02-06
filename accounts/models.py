@@ -72,6 +72,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     said = models.ForeignKey(
         Said,
         on_delete=models.CASCADE,
+        related_name="account",
         blank=True,
         null=True
     )
@@ -80,11 +81,9 @@ class Account(AbstractBaseUser, PermissionsMixin):
         on_delete=models.CASCADE,
         default=DEFAULT_STATUS_ID,
     )
-    following_accounts = models.ForeignKey(
+    following_accounts = models.ManyToManyField(
         'self',
-        on_delete=models.CASCADE,
         blank=True,
-        null=True
     )
 
     origin = models.ImageField(upload_to="static/photos", default="static/photos/fish_jellyfish.png")
@@ -127,3 +126,5 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+# TODO Accountを取得した時にfollowerの一覧も得られるようにする
