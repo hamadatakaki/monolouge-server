@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
-from monologue_api.models import Said, Status
-from monologue_api.serializers import SaidSerialiser, StatusSerializer
+from monologue_api.models import Said, Action, Emotion
+from monologue_api.serializers import SaidSerialiser, ActionSerializer, EmotionSerializer
 
 
 class SaidViewSet(viewsets.ModelViewSet):
@@ -9,6 +9,11 @@ class SaidViewSet(viewsets.ModelViewSet):
     serializer_class = SaidSerialiser
 
 
-class StatusViewSet(viewsets.ModelViewSet):
-    queryset = Status.objects.all().select_related()
-    serializer_class = StatusSerializer
+class ActionViewSet(viewsets.ModelViewSet):
+    queryset = Action.objects.all().select_related()
+    serializer_class = ActionSerializer
+
+
+class EmotionViewSet(viewsets.ModelViewSet):
+    queryset = Emotion.objects.all().select_related()
+    serializer_class = EmotionSerializer

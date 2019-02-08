@@ -17,7 +17,7 @@ from accounts.serializers import AccountSerializer
 
 
 class AccountViewSet(viewsets.ModelViewSet):
-    queryset = Account.objects.all().select_related()
+    queryset = Account.objects.all()
     serializer_class = AccountSerializer
 
 

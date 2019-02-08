@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
-from monologue_api.models import Status, Said, DEFAULT_STATUS_ID
+from monologue_api.models import Action, Emotion, Said, get_default_action, get_default_emotion
 
 import uuid as uuid_lib
 
@@ -69,21 +69,32 @@ class Account(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField(max_length=150, blank=True)
 
     # Relational keys
-    said = models.ForeignKey(
+    action = models.ForeignKey(
+        Action,
+        on_delete=models.CASCADE,
+        related_name="accounts",
+        default=get_default_action,
+    )
+    emotion = models.ForeignKey(
+        Emotion,
+        on_delete=models.CASCADE,
+        related_name="accounts",
+        blank=True,
+        null=True,
+        default=get_default_emotion,
+    )
+    saids = models.ForeignKey(
         Said,
         on_delete=models.CASCADE,
         related_name="account",
         blank=True,
         null=True
     )
-    status = models.ForeignKey(
-        Status,
-        on_delete=models.CASCADE,
-        default=DEFAULT_STATUS_ID,
-    )
     following_accounts = models.ManyToManyField(
         'self',
         blank=True,
+        symmetrical=False,
+        related_name="followers",
     )
 
     origin = models.ImageField(upload_to="static/photos", default="static/photos/fish_jellyfish.png")
@@ -127,4 +138,5 @@ class Account(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-# TODO Accountを取得した時にfollowerの一覧も得られるようにする
+    def get_followers(self):
+        return self.followers
