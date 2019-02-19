@@ -11,17 +11,19 @@ DEFAULT_EMOTION_ID = 1
 def get_default_action():
     try:
         action, _ = Action.objects.get_or_create(action="no action")
-        return action.pk
-    except Exception:
-        return DEFAULT_ACTION_ID
+    except Action.DoesNotExist:
+        action = Action(action="no action")
+        action.save()
+    return action.pk
 
 
 def get_default_emotion():
     try:
         emotion, _ = Emotion.objects.get_or_create(emotion="no emotion")
-        return emotion.pk
-    except Exception:
-        return DEFAULT_EMOTION_ID
+    except Emotion.DoesNotExist:
+        emotion = Emotion(emotion="no emotion")
+        emotion.save()
+    return emotion.pk
 
 
 class Action(models.Model):
@@ -47,5 +49,3 @@ class Said(models.Model):
         related_name="saids",
         default=get_default_emotion,
     )
-
-
