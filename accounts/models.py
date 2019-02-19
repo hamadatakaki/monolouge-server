@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
-from monologue_api.models import Action, Emotion, Said, get_default_action, get_default_emotion
+from monologue_api.models import Action, Emotion, get_default_action, get_default_emotion
 
 import uuid as uuid_lib
 
@@ -83,13 +83,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         null=True,
         default=get_default_emotion,
     )
-    saids = models.ForeignKey(
-        Said,
-        on_delete=models.CASCADE,
-        related_name="account",
-        blank=True,
-        null=True
-    )
+
     following_accounts = models.ManyToManyField(
         'self',
         blank=True,

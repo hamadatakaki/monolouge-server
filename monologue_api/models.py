@@ -2,8 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 
-# 可能なら別の実装を考える（てか知りたい
-# get_or_createでtry-except書いておいて、失敗したらID使うのが良さそう？
 DEFAULT_ACTION_ID = 1
 DEFAULT_EMOTION_ID = 1
 
@@ -48,4 +46,11 @@ class Said(models.Model):
         on_delete=models.CASCADE,
         related_name="saids",
         default=get_default_emotion,
+    )
+    account = models.ForeignKey(
+        "accounts.Account",
+        on_delete=models.CASCADE,
+        related_name="saids",
+        blank=True,
+        null=True,
     )
