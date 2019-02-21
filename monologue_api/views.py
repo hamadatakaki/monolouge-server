@@ -3,12 +3,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from monologue_api.models import Said, Action, Emotion
-from monologue_api.serializers import SaidSerialiser, ActionSerializer, EmotionSerializer
+from monologue_api.serializers import SaidSerializer, ActionSerializer, EmotionSerializer
 
 
 class SaidViewSet(viewsets.ModelViewSet):
     queryset = Said.objects.all().select_related()
-    serializer_class = SaidSerialiser
+    serializer_class = SaidSerializer
 
 
 class ActionViewSet(viewsets.ModelViewSet):
@@ -30,6 +30,6 @@ def timeline_view(request):
     following_accounts = user.following_accounts.all()
 
     saids = Said.objects.filter(account__in=following_accounts).order_by('datetime')
-    serializer = SaidSerialiser(saids, many=True)
+    serializer = SaidSerializer(saids, many=True)
 
     return Response(serializer.data)

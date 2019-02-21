@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from accounts.models import Account
-from monologue_api.serializers import SaidSerialiser, ActionSerializer, EmotionSerializer
+from monologue_api.serializers import SaidSerializer, ActionSerializer, EmotionSerializer
 
 
 class AccountSerializer(serializers.ModelSerializer):
     action = ActionSerializer()
     emotion = EmotionSerializer()
-    saids = SaidSerialiser(many=True)
+    saids = SaidSerializer(many=True)
 
     class Meta:
         model = Account
