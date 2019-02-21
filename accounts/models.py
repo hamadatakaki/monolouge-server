@@ -146,3 +146,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def get_followers(self):
         return self.followers
+
+    def get_username(self):
+        return self.username
