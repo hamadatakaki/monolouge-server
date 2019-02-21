@@ -72,14 +72,14 @@ class Account(AbstractBaseUser, PermissionsMixin):
     action = models.ForeignKey(
         Action,
         verbose_name=_('action'),
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         related_name="accounts",
         default=get_default_action,
     )
     emotion = models.ForeignKey(
         Emotion,
         verbose_name=_('emotion'),
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         related_name="accounts",
         blank=True,
         null=True,
