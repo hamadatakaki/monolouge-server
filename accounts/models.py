@@ -66,17 +66,19 @@ class Account(AbstractBaseUser, PermissionsMixin):
     )
     email = models.EmailField(_('メールアドレス'), unique=True)
 
-    bio = models.TextField(max_length=150, blank=True)
+    bio = models.TextField(_('プロフィール'), max_length=150, blank=True)
 
     # Relational keys
     action = models.ForeignKey(
         Action,
+        verbose_name=_('action'),
         on_delete=models.CASCADE,
         related_name="accounts",
         default=get_default_action,
     )
     emotion = models.ForeignKey(
         Emotion,
+        verbose_name=_('emotion'),
         on_delete=models.CASCADE,
         related_name="accounts",
         blank=True,
@@ -86,12 +88,17 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     following_accounts = models.ManyToManyField(
         'self',
+        verbose_name=_('following accounts'),
         blank=True,
         symmetrical=False,
         related_name="followers",
     )
 
-    origin = models.ImageField(upload_to="static/photos", default="static/photos/fish_jellyfish.png")
+    origin = models.ImageField(
+        verbose_name=_('origin of an icon image'),
+        upload_to="static/photos",
+        default="static/photos/fish_jellyfish.png"
+    )
     icon = ImageSpecField(
         source="origin",
         processors=[ResizeToFill(256, 256)],
