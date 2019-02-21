@@ -20,11 +20,8 @@ class EmotionViewSet(viewsets.ModelViewSet):
     queryset = Emotion.objects.all().select_related()
     serializer_class = EmotionSerializer
 
-# TODO 必要なAPIを絞る・Timeline用のAPIの実装
-# example https://qiita.com/suzuesa/items/30bcbe6a7b2b2de1df25
 
-
-@api_view(["GET"])
+@api_view(['GET'])
 def timeline_view(request):
     user = request.user
     following_accounts = user.following_accounts.all()

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from monologue_api.models import Said, Action, Emotion
-from accounts.serializer_name_and_uuid import AccountNameAndUuidSerializer
+from accounts.sub_serializers import AccountNameAndUuidSerializer
 
 
 class ActionSerializer(serializers.ModelSerializer):

@@ -121,19 +121,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # My Setting
-AUTH_USER_MODEL = "accounts.Account"
+AUTH_USER_MODEL = 'accounts.Account'
 
 INSTALLED_APPS += [
     # django contrib app
     'django.contrib.sites',
     # my app
-    "monologue_api",
-    "accounts",
+    'monologue_api',
+    'accounts',
     # third party
-    "django_filters",
+    'django_filters',
     'corsheaders',
-    "rest_framework",
-    "rest_framework.authtoken",
+    'rest_framework',
+    'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
     'allauth',

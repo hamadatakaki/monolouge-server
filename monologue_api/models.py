@@ -9,18 +9,18 @@ DEFAULT_EMOTION_ID = 1
 
 def get_default_action():
     try:
-        action, _ = Action.objects.get_or_create(action="no action")
+        action, _ = Action.objects.get_or_create(action='no action')
     except Action.DoesNotExist:
-        action = Action(action="no action")
+        action = Action(action='no action')
         action.save()
     return action.pk
 
 
 def get_default_emotion():
     try:
-        emotion, _ = Emotion.objects.get_or_create(emotion="no emotion")
+        emotion, _ = Emotion.objects.get_or_create(emotion='no emotion')
     except Emotion.DoesNotExist:
-        emotion = Emotion(emotion="no emotion")
+        emotion = Emotion(emotion='no emotion')
         emotion.save()
     return emotion.pk
 
@@ -29,7 +29,7 @@ class Action(models.Model):
     action = models.CharField(
         _('action'),
         max_length=31,
-        default="no action"
+        default='no action'
     )
 
 
@@ -37,7 +37,7 @@ class Emotion(models.Model):
     emotion = models.CharField(
         _('emotion'),
         max_length=31,
-        default="no emotion"
+        default='no emotion'
     )
 
 
@@ -48,21 +48,21 @@ class Said(models.Model):
         Action,
         verbose_name=_('action'),
         on_delete=models.SET_DEFAULT,
-        related_name="saids",
+        related_name='saids',
         default=get_default_action,
     )
     emotion = models.ForeignKey(
         Emotion,
         verbose_name=_('emotion'),
         on_delete=models.SET_DEFAULT,
-        related_name="saids",
+        related_name='saids',
         default=get_default_emotion,
     )
     account = models.ForeignKey(
-        "accounts.Account",
+        'accounts.Account',
         verbose_name=_('account'),
         on_delete=models.CASCADE,
-        related_name="saids",
+        related_name='saids',
         blank=True,
         null=True,
     )

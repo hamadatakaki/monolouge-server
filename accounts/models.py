@@ -49,7 +49,7 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser, PermissionsMixin):
     unicode_validator = UnicodeUsernameValidator()
-    alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+    alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z]*$', _('英数字のみしか利用できません.'))
 
     uuid = models.UUIDField(default=uuid_lib.uuid4, primary_key=True, editable=False)
 
@@ -66,7 +66,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         help_text=_('Required. 31 characters or fewer. Letters, digits and @/./+/-/_ only.'),
         validators=[alphanumeric_validator],
         error_messages={
-            'unique': _("そのアカウントIDを持ったアカウントはすでに存在しています"),
+            'unique': _('そのアカウントIDを持ったアカウントはすでに存在しています'),
         },
     )
     email = models.EmailField(_('メールアドレス'), unique=True)
@@ -78,14 +78,14 @@ class Account(AbstractBaseUser, PermissionsMixin):
         Action,
         verbose_name=_('action'),
         on_delete=models.SET_DEFAULT,
-        related_name="accounts",
+        related_name='accounts',
         default=get_default_action,
     )
     emotion = models.ForeignKey(
         Emotion,
         verbose_name=_('emotion'),
         on_delete=models.SET_DEFAULT,
-        related_name="accounts",
+        related_name='accounts',
         blank=True,
         null=True,
         default=get_default_emotion,
@@ -96,16 +96,16 @@ class Account(AbstractBaseUser, PermissionsMixin):
         verbose_name=_('following accounts'),
         blank=True,
         symmetrical=False,
-        related_name="followers",
+        related_name='followers',
     )
 
     origin = models.ImageField(
         verbose_name=_('origin of an icon image'),
-        upload_to="static/photos",
-        default="static/photos/fish_jellyfish.png"
+        upload_to='static/photos',
+        default='static/photos/fish_jellyfish.png'
     )
     icon = ImageSpecField(
-        source="origin",
+        source='origin',
         processors=[ResizeToFill(256, 256)],
         format='JPEG'
     )
