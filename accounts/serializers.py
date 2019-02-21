@@ -7,10 +7,12 @@ from monologue_api.serializers import SaidSerialiser, ActionSerializer, EmotionS
 class AccountSerializer(serializers.ModelSerializer):
     action = ActionSerializer()
     emotion = EmotionSerializer()
+    saids = SaidSerialiser(many=True)
 
     class Meta:
         model = Account
         fields = (
+            'uuid',
             'screen_name',
             'username',
             'email',

@@ -4,6 +4,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import RegexValidator
 
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -47,19 +48,23 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    unicode_validator = UnicodeUsernameValidator()
+    alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+
     uuid = models.UUIDField(default=uuid_lib.uuid4, primary_key=True, editable=False)
 
     screen_name = models.CharField(
         _('アカウントネーム'),
         max_length=50,
         help_text=_('50字以内で表示される名前を決めてください.'),
-        validators=[UnicodeUsernameValidator()],
+        validators=[unicode_validator],
     )
     username = models.CharField(
         _('アカウントID'),
         max_length=31,
         unique=True,
         help_text=_('Required. 31 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[alphanumeric_validator],
         error_messages={
             'unique': _("そのアカウントIDを持ったアカウントはすでに存在しています"),
         },
