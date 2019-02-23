@@ -28,7 +28,7 @@ def timeline_view(request):
     accounts = user.following_accounts.all()
     request_account = Account.objects.filter(username=user.username)
 
-    saids = Said.objects.filter(account__in=(accounts | request_account)).order_by('datetime')
+    saids = Said.objects.filter(account__in=(accounts | request_account)).order_by('datetime').reverse()
     serializer = SaidSerializer(saids, many=True)
 
     return Response(serializer.data)
