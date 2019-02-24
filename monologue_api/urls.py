@@ -2,7 +2,9 @@ from django.urls import path
 
 from rest_framework import routers
 
-from monologue_api.views import ActionViewSet, EmotionViewSet, SaidViewSet, timeline_view
+from monologue_api.views import (
+    ActionViewSet, EmotionViewSet, SaidViewSet, timeline_view, say_view
+)
 
 
 router = routers.DefaultRouter()
@@ -11,5 +13,6 @@ router.register('actions', ActionViewSet)
 router.register('emotions', EmotionViewSet)
 
 urlpatterns = [
-    path("timeline/", timeline_view)
+    path("timeline/", timeline_view),
+    path("say/", say_view)
 ]
