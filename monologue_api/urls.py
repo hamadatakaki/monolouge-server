@@ -3,7 +3,8 @@ from django.urls import path
 from rest_framework import routers
 
 from monologue_api.views import (
-    ActionViewSet, EmotionViewSet, SaidViewSet, timeline_view, say_view
+    ActionViewSet, EmotionViewSet, SaidViewSet,
+    timeline_view, say_view, said_has_an_action
 )
 
 
@@ -14,5 +15,6 @@ router.register('emotions', EmotionViewSet)
 
 urlpatterns = [
     path("timeline/", timeline_view),
-    path("say/", say_view)
+    path("say/", say_view),
+    path("actions/<int:id>/saids/", said_has_an_action)
 ]

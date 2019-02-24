@@ -38,7 +38,22 @@ def timeline_view(request):
     saids = Said.objects.filter(account__in=(accounts | request_account)).order_by("datetime").reverse()
     serializer = SaidSerializer(saids, many=True)
 
-    return Response(serializer.data)
+    return Response(serializer.data, status=HTTP_200_OK)
+
+
+@api_view(["GET"])
+def said_has_an_action(request, **kwargs):
+    id = kwargs['id']
+    try:
+        action = Action.objects.get(id=id)
+    except Action.DoesNotExist:
+        return Response({
+            "message": "not found the action"
+        }, status=HTTP_400_BAD_REQUEST)
+    saids = Said.objects.filter(action=action).order_by("datetime").reverse()
+    serializer = SaidSerializer(saids, many=True)
+
+    return Response(serializer.data, status=HTTP_200_OK)
 
 
 @api_view(["POST"])
