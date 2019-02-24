@@ -1,11 +1,18 @@
+from django.utils import timezone
+
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
+
 
 from monologue_api.models import Said, Action, Emotion
-from monologue_api.serializers import SaidSerializer, ActionSerializer, EmotionSerializer
+from monologue_api.serializers import (
+    SaidSerializer, ActionSerializer, EmotionSerializer
+)
 
 from accounts.models import Account
+
 
 class SaidViewSet(viewsets.ModelViewSet):
     queryset = Said.objects.all().select_related()
@@ -22,13 +29,39 @@ class EmotionViewSet(viewsets.ModelViewSet):
     serializer_class = EmotionSerializer
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def timeline_view(request):
     user = request.user
     accounts = user.following_accounts.all()
     request_account = Account.objects.filter(username=user.username)
 
-    saids = Said.objects.filter(account__in=(accounts | request_account)).order_by('datetime').reverse()
+    saids = Said.objects.filter(account__in=(accounts | request_account)).order_by("datetime").reverse()
     serializer = SaidSerializer(saids, many=True)
 
     return Response(serializer.data)
+
+
+@api_view(["POST"])
+def say_view(request):
+    me = request.user
+    data = request.data
+    try:
+        text = data["text"]
+        action, _ = Action.objects.get_or_create(action=data["action"])
+        emotion, _ = Emotion.objects.get_or_create(emotion=data["emotion"])
+    except KeyError:
+        return Response({
+            "message": "サポートされないデータが入力されています"
+        }, status=HTTP_400_BAD_REQUEST)
+
+    said = Said.objects.create(
+        text=text,
+        account=me,
+        datetime=timezone.now(),
+        action=action,
+        emotion=emotion
+    )
+
+    serializer = SaidSerializer(said)
+
+    return Response(serializer.data, status=HTTP_200_OK)
