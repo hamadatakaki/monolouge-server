@@ -43,14 +43,29 @@ def timeline_view(request):
 
 @api_view(["GET"])
 def said_has_an_action(request, **kwargs):
-    id = kwargs['id']
+    action_id = kwargs['id']
     try:
-        action = Action.objects.get(id=id)
+        action = Action.objects.get(id=action_id)
     except Action.DoesNotExist:
         return Response({
             "message": "not found the action"
         }, status=HTTP_400_BAD_REQUEST)
     saids = Said.objects.filter(action=action).order_by("datetime").reverse()
+    serializer = SaidSerializer(saids, many=True)
+
+    return Response(serializer.data, status=HTTP_200_OK)
+
+
+@api_view(["GET"])
+def said_has_an_emotion(request, **kwargs):
+    emotion_id = kwargs['id']
+    try:
+        emotion = Emotion.objects.get(id=emotion_id)
+    except Emotion.DoesNotExist:
+        return Response({
+            "message": "not found the action"
+        }, status=HTTP_400_BAD_REQUEST)
+    saids = Said.objects.filter(emotion=emotion).order_by("datetime").reverse()
     serializer = SaidSerializer(saids, many=True)
 
     return Response(serializer.data, status=HTTP_200_OK)
