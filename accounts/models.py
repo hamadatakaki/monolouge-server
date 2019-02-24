@@ -4,6 +4,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import RegexValidator
 
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -47,38 +48,44 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    unicode_validator = UnicodeUsernameValidator()
+    alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z]*$', _('英数字のみしか利用できません.'))
+
     uuid = models.UUIDField(default=uuid_lib.uuid4, primary_key=True, editable=False)
 
     screen_name = models.CharField(
         _('アカウントネーム'),
         max_length=50,
         help_text=_('50字以内で表示される名前を決めてください.'),
-        validators=[UnicodeUsernameValidator()],
+        validators=[unicode_validator],
     )
     username = models.CharField(
         _('アカウントID'),
         max_length=31,
         unique=True,
         help_text=_('Required. 31 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[alphanumeric_validator],
         error_messages={
-            'unique': _("そのアカウントIDを持ったアカウントはすでに存在しています"),
+            'unique': _('そのアカウントIDを持ったアカウントはすでに存在しています'),
         },
     )
     email = models.EmailField(_('メールアドレス'), unique=True)
 
-    bio = models.TextField(max_length=150, blank=True)
+    bio = models.TextField(_('プロフィール'), max_length=150, blank=True)
 
     # Relational keys
     action = models.ForeignKey(
         Action,
-        on_delete=models.CASCADE,
-        related_name="accounts",
+        verbose_name=_('action'),
+        on_delete=models.SET_DEFAULT,
+        related_name='accounts',
         default=get_default_action,
     )
     emotion = models.ForeignKey(
         Emotion,
-        on_delete=models.CASCADE,
-        related_name="accounts",
+        verbose_name=_('emotion'),
+        on_delete=models.SET_DEFAULT,
+        related_name='accounts',
         blank=True,
         null=True,
         default=get_default_emotion,
@@ -86,14 +93,19 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     following_accounts = models.ManyToManyField(
         'self',
+        verbose_name=_('following accounts'),
         blank=True,
         symmetrical=False,
-        related_name="followers",
+        related_name='followers',
     )
 
-    origin = models.ImageField(upload_to="static/photos", default="static/photos/fish_jellyfish.png")
+    origin = models.ImageField(
+        verbose_name=_('origin of an icon image'),
+        upload_to='static/photos',
+        default='static/photos/fish_jellyfish.png'
+    )
     icon = ImageSpecField(
-        source="origin",
+        source='origin',
         processors=[ResizeToFill(256, 256)],
         format='JPEG'
     )
@@ -134,3 +146,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def get_followers(self):
         return self.followers
+
+    def get_username(self):
+        return self.username
