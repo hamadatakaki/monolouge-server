@@ -7,13 +7,13 @@ from accounts.sub_serializers import AccountNameAndUuidSerializer
 class ActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Action
-        fields = ('action',)
+        fields = ('id', 'action')
 
 
 class EmotionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emotion
-        fields = ('emotion',)
+        fields = ('id', 'emotion',)
 
 
 class SaidSerializer(serializers.ModelSerializer):
@@ -23,4 +23,4 @@ class SaidSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Said
-        fields = ('text', 'datetime', 'action', 'emotion', 'account', )
+        fields = ('id', 'text', 'datetime', 'action', 'emotion', 'account', )
