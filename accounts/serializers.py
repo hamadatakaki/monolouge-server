@@ -12,14 +12,10 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = (
-            'uuid',
             'screen_name',
             'username',
-            'email',
             'bio',
             'saids',
             'action',
-            'emotion',
-            'following_accounts',
-            'followers',
+            'emotion'
         )
