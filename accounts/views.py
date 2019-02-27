@@ -47,7 +47,7 @@ def get_uuid(request, **kwargs):
         account = Account.objects.get(username=account_name)
     except Account.DoesNotExist:
         return Response({
-            "message": "the account who has request name does not exist "
+            "message": "the account who has request name does not exist."
         })
 
     res = {
