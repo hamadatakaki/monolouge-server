@@ -48,7 +48,7 @@ def said_has_an_action(request, **kwargs):
         action = Action.objects.get(id=action_id)
     except Action.DoesNotExist:
         return Response({
-            "message": "not found the action"
+            "message": "not found the action "
         }, status=HTTP_400_BAD_REQUEST)
     saids = Said.objects.filter(action=action).order_by("datetime").reverse()
     serializer = SaidSerializer(saids, many=True)
