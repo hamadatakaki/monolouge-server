@@ -37,3 +37,20 @@ def follow(request):
     return Response({
         "message": mess
     }, status=status)
+
+
+@api_view(["GET"])
+def get_uuid(request, **kwargs):
+    account_name = kwargs["name"]
+
+    try:
+        account = Account.objects.get(username=account_name)
+    except Account.DoesNotExist:
+        return Response({
+            "message": "the account who has request name does not exist "
+        })
+
+    res = {
+        "uuid": account.uuid
+    }
+    return Response(res, status=HTTP_200_OK)
