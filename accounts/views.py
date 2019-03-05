@@ -1,17 +1,30 @@
 from django.core.exceptions import ValidationError
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 
 from accounts.models import Account
-from accounts.serializers import AccountSerializer
+from accounts.serializers import AccountProfileSerializer, AccountImageSerializer, AccountSaidSerializer
 
 
-class AccountViewSet(viewsets.ModelViewSet):
+class AccountViewSet(viewsets.ReadOnlyModelViewSet, mixins.UpdateModelMixin):
     queryset = Account.objects.all()
-    serializer_class = AccountSerializer
+    serializer_class = AccountProfileSerializer
+
+
+@api_view(['GET'])
+def account_saids(request, **kwargs):
+    try:
+        account = Account.objects.get(uuid=kwargs["uuid"])
+    except Account.DoesNotExist:
+        return Response({
+            "message": "requested uuid does not exist"
+        }, status=HTTP_400_BAD_REQUEST)
+
+    serializer = AccountSaidSerializer(account)
+    return Response(serializer.data, status=HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -26,17 +39,13 @@ def follow(request):
             return Response({
                 "message": "the uuid does not exist."
             }, status=HTTP_400_BAD_REQUEST)
-
         mess = "you success to follow {}".format(uuid)
-        status = HTTP_200_OK
-
     else:
         mess = "this is your id: {}".format(uuid)
-        status = HTTP_200_OK
 
     return Response({
         "message": mess
-    }, status=status)
+    }, status=HTTP_200_OK)
 
 
 @api_view(["GET"])
@@ -54,3 +63,18 @@ def get_uuid(request, **kwargs):
         "uuid": account.uuid
     }
     return Response(res, status=HTTP_200_OK)
+
+
+# @api_view(["GET", "PUT"])
+# def edit_profile_image(request, **kwargs):
+#     me = request.user
+#     if request.method == "GET":
+#         serializer = AccountImageSerializer(me)
+#         return Response(serializer.data)
+#     elif request.method == "PUT":
+#         serializer = AccountImageSerializer(me, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
