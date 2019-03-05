@@ -3,8 +3,6 @@
 */migrations/*
 
 localsetting.py
-develop_setting.py
-product_setting.py
 
 /static/photos/
 /media/
