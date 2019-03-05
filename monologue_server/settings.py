@@ -1,14 +1,7 @@
 import os
 import pymysql
 
-DEBUG = True
-if DEBUG:
-    from develop_setting import (
-        Database, PROJECT_SECRET_KEY, DEFAULT_FILE_STORAGE,
-        AWS_S3_ACCESS_KEY_ID, AWS_S3_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
-    )
-else:
-    from product_setting import Database, PROJECT_SECRET_KEY
+from localsetting import Database, PROJECT_SECRET_KEY
 
 pymysql.install_as_MySQLdb()
 
@@ -23,6 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = PROJECT_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -145,7 +139,6 @@ INSTALLED_APPS += [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    #'storages',
 ]
 
 # CORS settings
