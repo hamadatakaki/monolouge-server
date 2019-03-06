@@ -1,7 +1,12 @@
 import os
 import pymysql
 
-from localsetting import Database, PROJECT_SECRET_KEY
+DEBUG = True
+
+if DEBUG:
+    from develop_setting import Database, PROJECT_SECRET_KEY
+else:
+    from product_setting import Database, PROJECT_SECRET_KEY
 
 pymysql.install_as_MySQLdb()
 
@@ -16,8 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = PROJECT_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
