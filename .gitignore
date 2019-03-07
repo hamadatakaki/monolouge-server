@@ -2,7 +2,8 @@
 .idea/*
 */migrations/*
 
-localsetting.py
+product_setting.py
+develop_setting.py
 
 /static/photos/
 /media/
