@@ -54,3 +54,18 @@ def get_uuid(request, **kwargs):
         "uuid": account.uuid
     }
     return Response(res, status=HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_info(request, **kwargs):
+    account_name = kwargs["name"]
+
+    try:
+        account = Account.objects.get(username=account_name)
+    except Account.DoesNotExist:
+        return Response({
+            "message": "the account who has request name does not exist "
+        })
+
+    serializer = AccountSerializer(account)
+    return Response(serializer.data, status=HTTP_200_OK)
