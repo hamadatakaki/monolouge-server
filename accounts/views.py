@@ -17,26 +17,42 @@ class AccountViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def follow(request):
     me = request.user
-    uuid = request.data["uuid"]
+    username = request.data["accountID"]
 
-    if str(me.uuid) != uuid:
+    if me.username != username:
         try:
-            me.following_accounts.add(Account.objects.get(uuid=uuid))
+            me.following_accounts.add(Account.objects.get(username=username))
         except ValidationError:
             return Response({
                 "message": "the uuid does not exist."
             }, status=HTTP_400_BAD_REQUEST)
 
-        mess = "you success to follow {}".format(uuid)
+        mess = "you success to follow {}".format(username)
         status = HTTP_200_OK
 
     else:
-        mess = "this is your id: {}".format(uuid)
+        mess = "this is your account id : {}".format(username)
         status = HTTP_200_OK
 
     return Response({
         "message": mess
     }, status=status)
+
+
+@api_view(['POST'])
+def unfollow(request):
+    me = request.user
+    username = request.data["accountID"]
+
+    if me.username != username:
+        me.following_accounts.all().exclude(username=username)
+        return Response({
+            "message": f"you unfollow {username}"
+        }, status=HTTP_200_OK)
+    else:
+        return Response({
+            "message": f"this is your account id : {username}"
+        }, status=HTTP_200_OK)
 
 
 @api_view(["GET"])
