@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_201_CREATED
 
 from django_filters import rest_framework as filters
 
@@ -53,9 +53,9 @@ def timeline_view(request):
 
 @api_view(["GET"])
 def said_has_an_action(request, **kwargs):
-    action_id = kwargs['id']
+    action_name = kwargs['name']
     try:
-        action = Action.objects.get(id=action_id)
+        action = Action.objects.get(action=action_name)
     except Action.DoesNotExist:
         return Response({
             "message": "not found the action "
@@ -68,9 +68,9 @@ def said_has_an_action(request, **kwargs):
 
 @api_view(["GET"])
 def said_has_an_emotion(request, **kwargs):
-    emotion_id = kwargs['id']
+    emotion_name = kwargs['name']
     try:
-        emotion = Emotion.objects.get(id=emotion_id)
+        emotion = Emotion.objects.get(name=emotion_name)
     except Emotion.DoesNotExist:
         return Response({
             "message": "not found the action"
@@ -88,20 +88,21 @@ def say_view(request):
     try:
         text = data["text"]
         action, _ = Action.objects.get_or_create(action=data["action"])
+        action.save()
         emotion, _ = Emotion.objects.get_or_create(emotion=data["emotion"])
+        emotion.save()
     except KeyError:
         return Response({
             "message": "サポートされないデータが入力されています"
         }, status=HTTP_400_BAD_REQUEST)
 
-    said = Said.objects.create(
-        text=text,
-        account=me,
-        datetime=timezone.now(),
-        action=action,
-        emotion=emotion
-    )
+    said = {
+        "text": text,
+        "account": me,
+        "datetime": timezone.now(),
+        "action": action,
+        "emotion": emotion
+    }
 
     serializer = SaidSerializer(said)
-
-    return Response(serializer.data, status=HTTP_200_OK)
+    return Response(serializer.data, status=HTTP_201_CREATED)

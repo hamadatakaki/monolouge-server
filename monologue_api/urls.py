@@ -16,6 +16,6 @@ router.register('emotions', EmotionViewSet)
 urlpatterns = [
     path("timeline/", timeline_view),
     path("say/", say_view),
-    path("actions/<int:id>/saids/", said_has_an_action),
-    path("emotions/<int:id>/saids/", said_has_an_emotion)
+    path("actions/<str:name>/saids/", said_has_an_action),
+    path("emotions/<str:name>/saids/", said_has_an_emotion)
 ]
