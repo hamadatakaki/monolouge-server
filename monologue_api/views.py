@@ -96,13 +96,13 @@ def say_view(request):
             "message": "サポートされないデータが入力されています"
         }, status=HTTP_400_BAD_REQUEST)
 
-    said = {
-        "text": text,
-        "account": me,
-        "datetime": timezone.now(),
-        "action": action,
-        "emotion": emotion
-    }
-
+    said = Said.objects.create(
+        text=text,
+        account=me,
+        datetime=timezone.now(),
+        action=action,
+        emotion=emotion
+    )
+    said.save()
     serializer = SaidSerializer(said)
     return Response(serializer.data, status=HTTP_201_CREATED)
