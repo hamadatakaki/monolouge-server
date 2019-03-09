@@ -16,6 +16,7 @@ pillow = "*"
 django-cors-headers = "*"
 django-rest-auth = "*"
 django-allauth = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
