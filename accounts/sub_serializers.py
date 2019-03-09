@@ -14,7 +14,7 @@ class AccountFollowersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('followers', )
+        fields = ('followers', 'following_accounts')
 
 
 class AccountProfileSerializer(serializers.ModelSerializer):

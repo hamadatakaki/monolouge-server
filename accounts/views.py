@@ -40,13 +40,15 @@ def follow(request):
     }, status=status)
 
 
+# excludeしたものをsetすれば良い
 @api_view(['POST'])
 def unfollow(request):
     me = request.user
     username = request.data["accountID"]
 
     if me.username != username:
-        me.following_accounts.all().exclude(username=username)
+        excluded = me.following_accounts.exclude(username=username)
+        me.following_accounts.set(excluded)
         return Response({
             "message": f"you unfollow {username}"
         }, status=HTTP_200_OK)
