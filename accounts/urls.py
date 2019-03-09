@@ -2,7 +2,7 @@ from django.urls import path
 
 from rest_framework import routers
 
-from accounts.views import AccountViewSet, follow, unfollow, get_uuid, get_info
+from accounts.views import AccountViewSet, follow, unfollow,  get_info, get_followers, edit_profile
 
 router = routers.DefaultRouter()
 router.register('accounts', AccountViewSet)
@@ -10,6 +10,8 @@ router.register('accounts', AccountViewSet)
 urlpatterns = [
     path('follow/', follow),
     path('unfollow/', unfollow),
-    path('accounts/info/<str:name>/uuid/', get_uuid),
-    path('accounts/info/<str:name>/', get_info)
+    path('accounts/info/<str:name>/', get_info),
+    # path('accounts/info/<str:name>/uuid/', get_uuid),  # TODO リファクタリング後 必要無かったら消す
+    path('accounts/<str:name>/followers/', get_followers),
+    path('accounts/<str:name>/profile/edit/', edit_profile)
 ]
