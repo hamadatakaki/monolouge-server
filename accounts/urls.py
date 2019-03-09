@@ -10,8 +10,8 @@ router.register('accounts', AccountViewSet)
 urlpatterns = [
     path('follow/', follow),
     path('unfollow/', unfollow),
-    path('accounts/<str:name>/', get_info),
-    # path('accounts/info/<str:name>/uuid/', get_uuid),  # TODO リファクタリング後 必要無かったら消す
+    path('accounts/<str:name>/info/', get_info),
+    # path('accounts/<str:name>/uuid/', get_uuid),  # TODO リファクタリング後 必要無かったら消す
     path('accounts/<str:name>/followers/', get_followers),
     path('accounts/<str:name>/edit/', edit_profile)
 ]
