@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 
+from django_filters import rest_framework as filters
 
 from monologue_api.models import Said, Action, Emotion
 from monologue_api.serializers import (
@@ -14,9 +15,18 @@ from monologue_api.serializers import (
 from accounts.models import Account
 
 
+class SaidFilter(filters.FilterSet):
+    text = filters.CharFilter(lookup_expr='contains')
+
+    class Meta:
+        model = Said
+        fields = ['text']
+
+
 class SaidViewSet(viewsets.ModelViewSet):
     queryset = Said.objects.all().select_related()
     serializer_class = SaidSerializer
+    filter_class = SaidFilter
 
 
 class ActionViewSet(viewsets.ModelViewSet):
