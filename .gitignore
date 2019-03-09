@@ -1,6 +1,5 @@
 .vscode/*
 .idea/*
-*/migrations/*
 
 product_setting.py
 develop_setting.py
